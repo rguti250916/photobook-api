@@ -28,10 +28,25 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500);
+  let {
+    statusCode = 500, message,
+  } = err;
+
+  switch (err.type) {
+    case 'entity.parse.failed':
+      message = `Bad Request: ${err.message}`;
+      break;
+    default:
+      if (err.message.startsWith('ValidationError')) {
+        statusCode = 422;
+      }
+      break;
+  }
+
+  res.status(statusCode);
   res.json({
     error: true,
-    message: err.message,
+    message,
   });
 });
 
