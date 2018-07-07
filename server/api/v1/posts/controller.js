@@ -13,7 +13,10 @@ const {
 } = require('./../../../utils/');
 
 exports.id = (req, res, next, id) => {
-  Model.findById(id)
+  Model
+    .findById(id)
+    .populate(referencesNames.join(' '))
+    .exec()
     .then((doc) => {
       if (doc) {
         req.doc = doc;
