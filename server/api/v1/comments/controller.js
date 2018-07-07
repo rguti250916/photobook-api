@@ -1,7 +1,10 @@
 const {
   Model,
   fields,
+  references,
 } = require('./model');
+
+const referencesNames = Object.getOwnPropertyNames(references);
 
 const {
   parsePaginationParams,
@@ -48,7 +51,8 @@ exports.all = (req, res, next) => {
     .find()
     .sort(sort)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .populate(referencesNames.join(' '));
 
   Promise.all([count.exec(), all.exec()])
     .then((data) => {
