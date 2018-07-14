@@ -37,8 +37,19 @@ const compactSortToStr = (sortBy, direction) => {
   return `${dir}${sortBy}`;
 };
 
+const filterByNested = (params, referecesNames) => {
+  const paramsNames = Object.getOwnPropertyNames(params);
+  const populateNames = referecesNames.filter(item => !paramsNames.includes(item));
+
+  return {
+    filters: params,
+    populate: populateNames.join(' '),
+  };
+};
+
 module.exports = {
   parsePaginationParams,
   parseSortParams,
   compactSortToStr,
+  filterByNested,
 };
